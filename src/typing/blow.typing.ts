@@ -1,14 +1,17 @@
-export interface ICreateSubscriberAction {
-    actionId: string
-    Fn: Function
+export type IEmitVariable = { [x: string]: any }
+export type IActionFn<T> = (data: T, variables?: IEmitVariable) => T | undefined | void
+
+export interface ICreateSubscriberAction<T, K> {
+    actionId: K
+    Fn: IActionFn<T>
 }
 
-export interface ICreateSubscriberStore<T> {
-    actions: ICreateSubscriberAction[]
+export interface ICreateSubscriberStore<T, K> {
+    actions: ICreateSubscriberAction<T, K>[]
     data: T
 }
 
-export interface ICreateSubscriberReturn extends ICreateSubscriberStore<any> {
-    subscribers: ICreateSubscriberAction[]
-    emit: (action: string) => void
+export interface ICreateSubscriberReturn<T, K> extends ICreateSubscriberStore<T, K> {
+    subscribers: ICreateSubscriberAction<T, K>[]
+    emit: (action: K, variables?: IEmitVariable) => void
 }

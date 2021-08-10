@@ -1,32 +1,42 @@
-import React from "react"
+import React, {useCallback, useState} from "react"
 import ReactDOM from "react-dom"
 import {createSubscriber} from "../src/subscriber";
 import {useSubscription} from "../src/useSubscription";
 import {useEmitter} from "../src/useEmitter";
 
-const subscribers = createSubscriber({
+const subscribers = createSubscriber<{id: string, value: string}, "Hola" | "Buenas">({
     actions: [
-        {actionId: "Hola", Fn: () => console.log("Funciona")}
+        {
+            actionId: "Hola",
+            Fn: (data, variables) =>
+                console.log("Funciona", data, variables)
+        }
     ],
-    data: []
+    data: {id: "identificador", value: "valor"}
 })
 
 ReactDOM.render(<Parent />, document.getElementById("app"))
 
 export function Parent() {
+    const [valor, setValor] = useState("Se intenta")
     const { subscribe } = useSubscription(subscribers)
     const { emit } = useEmitter(subscribers)
 
-    subscribe("Hola", () => {
-        console.log("subscribed")
+    const cambiarValor = useCallback(() => {
+        setValor("Nuevo Valor")
+    }, [])
+
+    subscribe("Hola", (data) => {
+        console.log("subscribed", data)
+        cambiarValor()
     })
 
     const onClick = () => {
-        emit("Hola")
+        emit("Hola", {id: "hey"})
     }
 
     return (<div>
         <p>Hola mundo</p>
-        <button onClick={onClick}>Se intenta</button>
+        <button onClick={onClick}>{valor}</button>
     </div>)
 }
