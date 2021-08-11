@@ -1,15 +1,16 @@
-import React, {useCallback, useState} from "react"
+import React from "react"
 import ReactDOM from "react-dom"
 import {createSubscriber} from "../src/subscriber";
 import {useSubscription} from "../src/useSubscription";
 import {useEmitter} from "../src/useEmitter";
+import {useData} from "../src/useData";
 
 const subscribers = createSubscriber<{id: string, value: string}, "Hola" | "Buenas">({
     actions: [
         {
             actionId: "Hola",
             Fn: (data, variables) =>
-                console.log("Funciona", data, variables)
+                ({id:"hey", value: "Jeremy"})
         }
     ],
     data: {id: "identificador", value: "valor"}
@@ -18,17 +19,12 @@ const subscribers = createSubscriber<{id: string, value: string}, "Hola" | "Buen
 ReactDOM.render(<Parent />, document.getElementById("app"))
 
 export function Parent() {
-    const [valor, setValor] = useState("Se intenta")
+    const { data } = useData(subscribers, "Hola")
     const { subscribe } = useSubscription(subscribers)
     const { emit } = useEmitter(subscribers)
 
-    const cambiarValor = useCallback(() => {
-        setValor("Nuevo Valor")
-    }, [])
-
     subscribe("Hola", (data) => {
         console.log("subscribed", data)
-        cambiarValor()
     })
 
     const onClick = () => {
@@ -37,6 +33,6 @@ export function Parent() {
 
     return (<div>
         <p>Hola mundo</p>
-        <button onClick={onClick}>{valor}</button>
+        <button onClick={onClick}>{JSON.stringify(data)}</button>
     </div>)
 }
