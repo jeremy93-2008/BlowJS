@@ -1,5 +1,6 @@
 export type IEmitVariable = { [x: string]: any }
 export type IActionFn<T> = (data: T, variables?: IEmitVariable) => T | undefined | void
+export type ISubscriptionCompare<T> = (oldData: T | undefined, data: T) => boolean
 
 export interface ICreateSubscriberAction<T, K> {
     actionId: K
@@ -19,5 +20,7 @@ export interface ICreateSubscriberStore<T, K> {
 export interface ICreateSubscriberReturn<T, K> extends ICreateSubscriberStore<T, K> {
     dataSubscription: ICreateSubscriberData<T, K>[]
     subscribers: ICreateSubscriberAction<T, K>[]
+    prevData: T | undefined
     emit: (action: K, variables?: IEmitVariable) => void
+    broadcast: (fromEmit: boolean,variables?: IEmitVariable) => void
 }
