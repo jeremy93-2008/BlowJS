@@ -9,7 +9,7 @@ export function useEmitter<T,K>(subscribers: ICreateSubscriberReturn<T,K>) {
             if(!currentAction) return
             const returnData = currentAction.Fn(subscribers.data, variables)
             subscribers.prevData = JSON.parse(JSON.stringify(subscribers.data))
-            subscribers.data = returnData ? {...returnData} : subscribers.data
+            subscribers.data = returnData ? JSON.parse(JSON.stringify(returnData)) : subscribers.data
             subscribers.emit(action, variables)
         }
     }
