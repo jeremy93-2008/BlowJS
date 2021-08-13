@@ -1,7 +1,7 @@
 import {ICreateSubscriberReturn, ISubscriptionCompare} from "./typing/blow.typing";
 import {useMemo, useState} from "react";
 
-export function useDataSubscription<T, K>(subscribers: ICreateSubscriberReturn<T, K>, action?: K, compare?: ISubscriptionCompare<T>) {
+export function useDataSubscription<T, K, C>(subscribers: ICreateSubscriberReturn<T, K, C>, action?: K, compare?: ISubscriptionCompare<T>) {
     const [data, setData] = useState(subscribers.data)
     const [initial, setInitial] = useState(true)
 

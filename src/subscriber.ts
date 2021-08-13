@@ -1,29 +1,29 @@
 import {
+    IActionVariable,
     ICreateSubscriberAction,
     ICreateSubscriberReturn,
     ICreateSubscriberStore,
-    IEmitVariable
-} from "./typing/blow.typing";
+} from './typing/blow.typing'
 
-export function createSubscriber<T extends {}, K>(store: ICreateSubscriberStore<T, K>): ICreateSubscriberReturn<T, K> {
-    const listOfSubscribers = [] as ICreateSubscriberAction<T, K>[]
-    const listOfDataSubscription = [] as ICreateSubscriberAction<T, K>[]
+export function createSubscriber<TData extends {}, TActions, TVariables>(store: ICreateSubscriberStore<TData, TActions, TVariables>): ICreateSubscriberReturn<TData, TActions, TVariables> {
+    const listOfSubscribers = [] as ICreateSubscriberAction<TData, TActions, TVariables>[]
+    const listOfDataSubscription = [] as ICreateSubscriberAction<TData, TActions, TVariables>[]
 
-    const subscriberReturn: Partial<ICreateSubscriberReturn<T, K>> =
+    const subscriberReturn: Partial<ICreateSubscriberReturn<TData, TActions, TVariables>> =
         {...store, subscribers: listOfSubscribers, dataSubscription: listOfDataSubscription, prevData: undefined}
 
-    subscriberReturn.emit = (action: K, variables) =>
-        emitSubscription<T, K>(subscriberReturn.data as T, listOfSubscribers, listOfDataSubscription, action, variables)
+    subscriberReturn.emit = (action: TActions, variables) =>
+        emitSubscription<TData, TActions, TVariables>(subscriberReturn.data as TData, listOfSubscribers, listOfDataSubscription, action, variables)
     subscriberReturn.broadcast = (fromEmit, variables) =>
-        broadcastSubscription<T, K>(subscriberReturn.data as T, listOfSubscribers, listOfDataSubscription, variables, fromEmit)
+        broadcastSubscription<TData, TActions, TVariables>(subscriberReturn.data as TData, listOfSubscribers, listOfDataSubscription, variables, fromEmit)
 
-    return subscriberReturn as ICreateSubscriberReturn<T, K>
+    return subscriberReturn as ICreateSubscriberReturn<TData, TActions, TVariables>
 }
 
-function broadcastSubscription<T, K>(data: T,
-                               subscribers: ICreateSubscriberAction<T, K>[],
-                               dataSubscription: ICreateSubscriberAction<T, K>[],
-                               variables: IEmitVariable | undefined,
+function broadcastSubscription<T, K, C>(data: T,
+                               subscribers: ICreateSubscriberAction<T, K, C>[],
+                               dataSubscription: ICreateSubscriberAction<T, K, C>[],
+                               variables: C | undefined,
                                fromEmit: boolean) {
     if(fromEmit)
         console.warn("Warning: Blow has detected a emit without specify an action. " +
@@ -32,18 +32,18 @@ function broadcastSubscription<T, K>(data: T,
             "If that what you wanted use useBroadcast hook instead")
     const defaultBlowVariable = {__BLOW__: {type: "broadcast"}}
     const broadcastVariable = variables ? {...variables, ...defaultBlowVariable} : defaultBlowVariable
-    subscribers.map(sub => sub.Fn(data, broadcastVariable))
-    dataSubscription.map(sub => sub.Fn(data, broadcastVariable))
+    subscribers.map(sub => sub.Fn(data, broadcastVariable as IActionVariable<C>))
+    dataSubscription.map(sub => sub.Fn(data, broadcastVariable as IActionVariable<C>))
 }
 
-function emitSubscription<T, K>(data: T,
-                                subscribers: ICreateSubscriberAction<T, K>[],
-                                dataSubscription: ICreateSubscriberAction<T, K>[],
+function emitSubscription<T, K, C>(data: T,
+                                subscribers: ICreateSubscriberAction<T, K, C>[],
+                                dataSubscription: ICreateSubscriberAction<T, K, C>[],
                                 action: K,
-                                variables: IEmitVariable | undefined) {
+                                variables: C | undefined) {
     const defaultBlowVariables = {__BLOW__: {type: "emit", action: action}}
     const emitVariable = variables ? {...variables, ...defaultBlowVariables} : defaultBlowVariables
-    subscribers.filter(sub => sub.actionId == action).map(sub => sub.Fn(data, emitVariable))
+    subscribers.filter(sub => sub.actionId == action).map(sub => sub.Fn(data, emitVariable as unknown as IActionVariable<C>))
     dataSubscription.filter(sub =>
         (sub.actionId == action || sub.actionId == undefined)).map(sub => sub.Fn(data))
 }

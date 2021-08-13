@@ -1,8 +1,8 @@
-import {ICreateSubscriberReturn, IEmitVariable} from "./typing/blow.typing";
+import {ICreateSubscriberReturn} from "./typing/blow.typing";
 
-export function useBroadcast<T, K>(subscribers: ICreateSubscriberReturn<T, K>) {
+export function useBroadcast<T, K, C>(subscribers: ICreateSubscriberReturn<T, K, C>) {
     return {
-        broadcast: (variables?: IEmitVariable) => {
+        broadcast: (variables?: C) => {
             subscribers.broadcast(false, variables)
         }
     }

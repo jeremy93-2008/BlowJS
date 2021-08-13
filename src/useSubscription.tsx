@@ -1,16 +1,16 @@
-import {IActionFn, ICreateSubscriberReturn, IEmitVariable, ISubscriptionCompare} from "./typing/blow.typing";
+import {IActionFn, ICreateSubscriberReturn, ISubscriptionCompare} from "./typing/blow.typing";
 import {useCallback, useState} from "react";
 
-export function useSubscription<T, K>(subscribers: ICreateSubscriberReturn<T,K>) {
+export function useSubscription<T, K, C>(subscribers: ICreateSubscriberReturn<T,K,C>) {
     const [initial, setInitial] = useState(true)
 
-    const subscriptionFn = (data: T, variables: IEmitVariable| undefined,
-                            fn: IActionFn<T>, compare?: ISubscriptionCompare<T>) => {
+    const subscriptionFn = (data: T, variables: C | undefined,
+                            fn: IActionFn<T,K,C>, compare?: ISubscriptionCompare<T>) => {
         if(compare && !compare(subscribers.prevData, data)) return
         fn(data, variables)
     }
 
-    const subscribe = useCallback((action: K, fn: IActionFn<T>, compare?: ISubscriptionCompare<T>) => {
+    const subscribe = useCallback((action: K, fn: IActionFn<T, K, C>, compare?: ISubscriptionCompare<T>) => {
         if(!initial) return
         subscribers.subscribers.push({
             actionId: action,

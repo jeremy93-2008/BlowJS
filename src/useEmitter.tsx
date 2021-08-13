@@ -1,8 +1,8 @@
-import {ICreateSubscriberReturn, IEmitVariable} from "./typing/blow.typing";
+import {ICreateSubscriberReturn} from "./typing/blow.typing";
 
-export function useEmitter<T,K>(subscribers: ICreateSubscriberReturn<T,K>) {
+export function useEmitter<T,K,C>(subscribers: ICreateSubscriberReturn<T,K,C>) {
     return {
-        emit: (action?: K, variables?: IEmitVariable) => {
+        emit: (action?: K, variables?: C) => {
             if(!action) return subscribers.broadcast(true, variables)
 
             const currentAction = subscribers.actions.find(act => act.actionId === action)
