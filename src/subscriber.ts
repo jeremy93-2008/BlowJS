@@ -32,8 +32,8 @@ function broadcastSubscription<T, K, C>(data: T,
             "If that what you wanted use useBroadcast hook instead")
     const defaultBlowVariable = {__BLOW__: {type: "broadcast"}}
     const broadcastVariable = variables ? {...variables, ...defaultBlowVariable} : defaultBlowVariable
-    subscribers.map(sub => sub.Fn(data, broadcastVariable as IActionVariable<C>))
-    dataSubscription.map(sub => sub.Fn(data, broadcastVariable as IActionVariable<C>))
+    subscribers.map(sub => sub.Fn(data, broadcastVariable as IActionVariable<C, K>))
+    dataSubscription.map(sub => sub.Fn(data, broadcastVariable as IActionVariable<C, K>))
 }
 
 function emitSubscription<T, K, C>(data: T,
@@ -43,7 +43,7 @@ function emitSubscription<T, K, C>(data: T,
                                 variables: C | undefined) {
     const defaultBlowVariables = {__BLOW__: {type: "emit", action: action}}
     const emitVariable = variables ? {...variables, ...defaultBlowVariables} : defaultBlowVariables
-    subscribers.filter(sub => sub.actionId == action).map(sub => sub.Fn(data, emitVariable as unknown as IActionVariable<C>))
+    subscribers.filter(sub => sub.actionId == action).map(sub => sub.Fn(data, emitVariable as unknown as IActionVariable<C, K>))
     dataSubscription.filter(sub =>
         (sub.actionId == action || sub.actionId == undefined)).map(sub => sub.Fn(data))
 }
