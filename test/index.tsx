@@ -18,7 +18,7 @@ const subscribers = createSubscriber<{id: string, value: string, hola: any}, "Ho
                 ({id:"hey", value: "Jeremy", hola: { buenas: "Hey" }})
         }
     ],
-    data: {id: "identificador", value: "valor", hola: { buenas: "Hey", element: document.createElement("div"), lol:  map}}
+    data: {id: "identificador", value: "valor", hola: { buenas: "Hey", element: document.createElement("div"), lol:  map, func: () => console.log("Hola")}}
 })
 
 ReactDOM.render(<Parent />, document.getElementById("app"))

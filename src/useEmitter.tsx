@@ -1,5 +1,5 @@
 import {ICreateSubscriberReturn} from "./typing/blow.typing";
-import {clone} from "./util/clone";
+import { cloneDeep } from "lodash"
 
 export function useEmitter<T,K,C>(subscribers: ICreateSubscriberReturn<T,K,C>) {
     return {
@@ -9,8 +9,8 @@ export function useEmitter<T,K,C>(subscribers: ICreateSubscriberReturn<T,K,C>) {
             const currentAction = subscribers.actions.find(act => act.actionId === action)
             if(!currentAction) return
             const returnData = currentAction.Fn(subscribers.data, variables)
-            subscribers.prevData = clone(subscribers.data)
-            subscribers.data = returnData ? clone(returnData) : subscribers.data
+            subscribers.prevData = cloneDeep(subscribers.data)
+            subscribers.data = returnData ? cloneDeep(returnData) : subscribers.data
             subscribers.emit(action, variables)
         }
     }
