@@ -1,7 +1,14 @@
-import {IActionFn, ICreateSubscriberReturn, ISubscriptionCompare} from "./typing/blow.typing";
+import {
+    IActionFn,
+    IContextCreateSubscriberReturn,
+    ICreateSubscriberReturn,
+    ISubscriptionCompare
+} from "./typing/blow.typing";
 import {useCallback, useState} from "react";
+import {useSubscriberContext} from "./hook/useSubscriberContext";
 
-export function useSubscription<T, K, C>(subscribers: ICreateSubscriberReturn<T,K,C>) {
+export function useSubscription<T, K, C>(subscribersOrContext: ICreateSubscriberReturn<T, K, C> | IContextCreateSubscriberReturn<T, K, C>) {
+    const { subscribers } = useSubscriberContext(subscribersOrContext)
     const [initial, setInitial] = useState(true)
 
     const subscriptionFn = (data: T, variables: C | undefined,
