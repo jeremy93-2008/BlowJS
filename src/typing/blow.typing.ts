@@ -1,3 +1,5 @@
+import {Context} from "react";
+
 export type IActionVariable<T, K> = T & IDefaultVariables<K>
 export type IDefaultVariables<K> = { __BLOW__: {type: string, action?: K } }
 export type IActionFn<T, K, C> = (data: T, variables?: IActionVariable<C, K> | C) => T | undefined | void
@@ -24,4 +26,13 @@ export interface ICreateSubscriberReturn<TData, TActions, TVariables> extends IC
     prevData: TData | undefined
     emit: (action: TActions, variables?: TVariables) => void
     broadcast: (fromEmit: boolean, variables?: TVariables) => void
+}
+
+export type IContextCreateSubscriberReturn<TData, TActions, TVariables> = Context<IScopedCreateSubscriberReturn<TData, TActions, TVariables>>
+
+export interface IScopedCreateSubscriberReturn<TData, TActions, TVariables> {
+    __BLOW__: {
+        type: "scope"
+    }
+    subscribers: ICreateSubscriberReturn<TData, TActions, TVariables>
 }
