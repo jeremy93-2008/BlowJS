@@ -8,7 +8,7 @@ import {useCallback, useState} from "react";
 import {useSubscriberContext} from "./hook/useSubscriberContext";
 
 export function useSubscription<T, K, C>(subscribersOrContext: ICreateSubscriberReturn<T, K, C> | IContextCreateSubscriberReturn<T, K, C>) {
-    const { subscribers } = useSubscriberContext(subscribersOrContext)
+    const { subscribers, isScoped, __BLOW__ } = useSubscriberContext(subscribersOrContext)
     const [initial, setInitial] = useState(true)
 
     const subscriptionFn = (data: T, variables: C | undefined,
@@ -18,13 +18,15 @@ export function useSubscription<T, K, C>(subscribersOrContext: ICreateSubscriber
     }
 
     const subscribe = useCallback((action: K, fn: IActionFn<T, K, C>, compare?: ISubscriptionCompare<T>) => {
-        if(!initial) return
+        if(!initial && (isScoped && !__BLOW__.initial)) return
         subscribers.subscribers.push({
             actionId: action,
             Fn: (data: T, variables) => subscriptionFn(data, variables, fn, compare)
         })
+        if(__BLOW__)
+            __BLOW__.initial = false
         setInitial(false)
-    }, [initial])
+    }, [initial, __BLOW__])
 
     return { subscribe }
 }
