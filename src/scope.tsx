@@ -3,17 +3,19 @@ import React, {createContext} from "react";
 import {createSubscriber} from "./subscriber";
 
 export function createScopeSubscriber<T, K, C>(store: ICreateSubscriberStore<T, K, C>) {
-    const newScopedSubscribers: IScopedCreateSubscriberReturn<T, K, C> = {
-        __BLOW__: {
-            type: "scope"
-        },
-        subscribers: createSubscriber(store)
-    }
-
-    const Context = createContext(newScopedSubscribers)
+    const Context = createContext({} as IScopedCreateSubscriberReturn<T, K, C>)
     return {
         Scope: {
-            Provider: (props: any) => <Context.Provider value={newScopedSubscribers}>{props.children}</Context.Provider>,
+            Provider: (props: any) => {
+                const newScopedSubscribers: IScopedCreateSubscriberReturn<T, K, C> = {
+                    __BLOW__: {
+                        type: "scope",
+                        initial: true
+                    },
+                    subscribers: createSubscriber(store)
+                }
+                return <Context.Provider value={newScopedSubscribers}>{props.children}</Context.Provider>
+            },
             subscribers: Context
         }
     }

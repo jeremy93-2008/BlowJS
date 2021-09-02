@@ -56,6 +56,9 @@ export function Parent() {
         <Scope.Provider>
             <Children />
         </Scope.Provider>
+		<Scope.Provider>
+            <Children />
+        </Scope.Provider>
     </div>)
 }
 

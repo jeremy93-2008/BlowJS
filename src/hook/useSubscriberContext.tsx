@@ -14,7 +14,7 @@ export function useSubscriberContext<T,K,C>(subscribersOrContext:
         return !!((subscribersOrContext as any).Provider)
     }, [subscribersOrContext])
 
-    const { subscribers: subscriberContext } = useContext( isScoped ? newContext : createContext({} as IScopedCreateSubscriberReturn<T, K, C>))
+    const { subscribers: subscriberContext, __BLOW__ } = useContext( isScoped ? newContext : createContext({} as IScopedCreateSubscriberReturn<T, K, C>))
 
-    return { subscribers: isScoped ? subscriberContext : subscribersOrContext as ICreateSubscriberReturn<T, K, C>, isScoped}
+    return { subscribers: isScoped ? subscriberContext : subscribersOrContext as ICreateSubscriberReturn<T, K, C>, isScoped, __BLOW__}
 }

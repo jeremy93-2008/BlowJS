@@ -32,7 +32,8 @@ export type IContextCreateSubscriberReturn<TData, TActions, TVariables> = Contex
 
 export interface IScopedCreateSubscriberReturn<TData, TActions, TVariables> {
     __BLOW__: {
-        type: "scope"
+        type: "scope",
+        initial: boolean
     }
     subscribers: ICreateSubscriberReturn<TData, TActions, TVariables>
 }
