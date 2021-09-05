@@ -1,4 +1,4 @@
-import {ICreateSubscriberStore, IScopedCreateSubscriberReturn} from "./typing/blow.typing";
+import {ICreateSubscriberStore, IScopedCreateSubscriberReturn, IScopedSubscribersReturn} from "./typing/blow.typing";
 import React, {createContext} from "react";
 import {createSubscriber} from "./subscriber";
 
@@ -18,5 +18,5 @@ export function createScopeSubscriber<T, K, C>(store: ICreateSubscriberStore<T, 
             },
             subscribers: Context
         }
-    }
+    } as IScopedSubscribersReturn<T, K, C>
 }

@@ -25,7 +25,8 @@ export function useSubscription<T, K, C>(subscribersOrContext: ICreateSubscriber
         })
         if(__BLOW__)
             __BLOW__.initial = false
-        setInitial(false)
+        if(initial)
+            setInitial(false)
     }, [initial, __BLOW__])
 
     return { subscribe }

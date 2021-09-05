@@ -1,37 +1,20 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import {createSubscriber} from "../src/subscriber";
-import {useSubscription} from "../src/useSubscription";
-import {useEmitter} from "../src/useEmitter";
-import {useDataSubscription} from "../src/useDataSubscription";
-import {useBroadcast} from "../src/useBroadcast";
-import {createScopeSubscriber} from "../src/scope";
+import {createSubscriber} from "../../src/subscriber";
+import {useSubscription} from "../../src/useSubscription";
+import {useEmitter} from "../../src/useEmitter";
+import {useDataSubscription} from "../../src/useDataSubscription";
+import {useBroadcast} from "../../src/useBroadcast";
+import {createScopeSubscriber} from "../../src/scope";
+import {ITestActions, ITestStore, testStore} from "../store";
 
 const map = new Map()
 
 map.set("hola", "miau")
 
-const subscribers = createSubscriber<{id: string, value: string, hola: any}, "Hola" | "Buenas", any>({
-    actions: [
-        {
-            actionId: "Hola",
-            Fn: (data, variables) =>
-                ({id:"hey", value: "Jeremy", hola: { buenas: "Hey" }})
-        }
-    ],
-    data: {id: "identificador", value: "valor", hola: { buenas: "Hey", element: document.createElement("div"), lol:  map, func: () => console.log("Hola")}}
-})
+const subscribers = createSubscriber<ITestStore, ITestActions, any>(testStore)
 
-const { Scope } = createScopeSubscriber<{id: string, value: string, hola: any}, "Hola" | "Buenas", any>({
-    actions: [
-        {
-            actionId: "Hola",
-            Fn: (data, variables) =>
-                ({id:"hey", value: "Jeremy", hola: { buenas: "Hey" }})
-        }
-    ],
-    data: {id: "identificador", value: "valor", hola: { buenas: "Hey", element: document.createElement("div"), lol:  map, func: () => console.log("Hola")}}
-})
+const { Scope } = createScopeSubscriber<ITestStore, ITestActions, any>(testStore)
 
 ReactDOM.render(<Parent />, document.getElementById("app"))
 

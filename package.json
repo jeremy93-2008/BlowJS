@@ -1,18 +1,32 @@
 {
-  "name": "blow",
+  "name": "blowjs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "parcel test/public/index.html"
+    "manual:test": "parcel test/manual/public/index.html",
+    "test": "jest --coverage"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/enzyme": "^3.10.9",
+    "@types/jest": "^27.0.1",
     "@types/react": "^17.0.16",
     "@types/react-dom": "^17.0.9",
+    "@types/react-test-renderer": "^17.0.1",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
+    "babel-jest": "^27.1.0",
+    "enzyme": "^3.11.0",
+    "jest": "^27.1.0",
+    "jsdom": "^14.1.0",
+    "jsdom-global": "^3.0.2",
+    "react-test-renderer": "^17.0.2",
     "rollup": "^2.56.1",
     "rollup-plugin-typescript2": "^0.30.0",
     "typescript": "^4.3.5"

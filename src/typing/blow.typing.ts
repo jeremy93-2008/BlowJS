@@ -37,3 +37,10 @@ export interface IScopedCreateSubscriberReturn<TData, TActions, TVariables> {
     }
     subscribers: ICreateSubscriberReturn<TData, TActions, TVariables>
 }
+
+export interface IScopedSubscribersReturn<TData, TActions, IVariables> {
+    Scope: {
+        Provider: (props: any) => JSX.Element,
+        subscribers: IContextCreateSubscriberReturn<TData, TActions, IVariables>
+    }
+}
