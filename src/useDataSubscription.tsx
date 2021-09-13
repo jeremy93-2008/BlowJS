@@ -6,6 +6,7 @@ import {
 } from "./typing/blow.typing";
 import React, {createContext, useContext, useMemo, useState} from "react";
 import {useSubscriberContext} from "./hook/useSubscriberContext";
+import {log} from "./logger/index";
 
 export function useDataSubscription<T, K, C>(subscribersOrContext: ICreateSubscriberReturn<T, K, C> | IContextCreateSubscriberReturn<T, K, C>, action?: K, compare?: ISubscriptionCompare<T>) {
     const { subscribers, isScoped, __BLOW__ } = useSubscriberContext(subscribersOrContext)
@@ -13,6 +14,8 @@ export function useDataSubscription<T, K, C>(subscribersOrContext: ICreateSubscr
     const [initial, setInitial] = useState(true)
 
     const onDataChange = (d: T) => {
+        log("info", subscribers.contextId, "DataSubscription Callback - data:", data,
+            " - variables: ", null)
         if(compare && !compare(data, d)) return
         if(data === d) return
         setData(d)

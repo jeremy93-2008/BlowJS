@@ -6,6 +6,7 @@ import {
 } from "./typing/blow.typing";
 import {useCallback, useState} from "react";
 import {useSubscriberContext} from "./hook/useSubscriberContext";
+import {log} from "./logger/index";
 
 export function useSubscription<T, K, C>(subscribersOrContext: ICreateSubscriberReturn<T, K, C> | IContextCreateSubscriberReturn<T, K, C>) {
     const { subscribers, isScoped, __BLOW__ } = useSubscriberContext(subscribersOrContext)
@@ -21,7 +22,11 @@ export function useSubscription<T, K, C>(subscribersOrContext: ICreateSubscriber
         if(!initial && (isScoped && !__BLOW__.initial)) return
         subscribers.subscribers.push({
             actionId: action,
-            Fn: (data: T, variables) => subscriptionFn(data, variables, fn, compare)
+            Fn: (data: T, variables) => {
+                log("info", subscribers.contextId, "Subscription Callback - data:", data,
+                    " - variables: ", variables , "SubscriptionFn: ", fn)
+                subscriptionFn(data, variables, fn, compare)
+            }
         })
         if(__BLOW__)
             __BLOW__.initial = false

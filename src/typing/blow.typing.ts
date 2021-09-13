@@ -26,6 +26,7 @@ export interface ICreateSubscriberReturn<TData, TActions, TVariables> extends IC
     prevData: TData | undefined
     emit: (action: TActions, variables?: TVariables) => void
     broadcast: (fromEmit: boolean, variables?: TVariables) => void
+    contextId?: string;
 }
 
 export type IContextCreateSubscriberReturn<TData, TActions, TVariables> = Context<IScopedCreateSubscriberReturn<TData, TActions, TVariables>>

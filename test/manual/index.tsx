@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import ReactDOM from "react-dom"
 import {createSubscriber} from "../../src/subscriber";
 import {useSubscription} from "../../src/useSubscription";
@@ -39,21 +39,30 @@ export function Parent() {
         <Scope.Provider>
             <Children />
         </Scope.Provider>
-		<Scope.Provider>
-            <Children />
-        </Scope.Provider>
+        <div>
+            <Scope.Provider>
+                <Children />
+            </Scope.Provider>
+        </div>
     </div>)
 }
 
 export function Children() {
+    const [state, setState] = useState("")
     const { data } = useDataSubscription(Scope.subscribers, "Hola")
     const { emit } = useEmitter(Scope.subscribers)
+    const onInsideClick = () => {
+        setState((prevState => prevState + " intentando "))
+    }
     const onClick = () => {
         emit("Hola", { trying: "childScope" })
     }
+
     return <div style={{margin: "15px"}}>
+        <p>Buenas {state}</p>
         <p>Hola a todos</p>
         <p>{data.value}</p>
+        <button onClick={onInsideClick}>Inside State</button>
         <button onClick={onClick}>Hola</button>
     </div>
 }
