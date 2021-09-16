@@ -1,6 +1,7 @@
 import {ICreateSubscriberStore, IScopedCreateSubscriberReturn, IScopedSubscribersReturn} from "./typing/blow.typing";
 import React, {createContext} from "react";
 import {createSubscriber} from "./subscriber";
+import { cloneDeep } from "lodash"
 
 export function createScopeSubscriber<T, K, C>(store: ICreateSubscriberStore<T, K, C>) {
     const Context = createContext({} as IScopedCreateSubscriberReturn<T, K, C>)
@@ -12,7 +13,7 @@ export function createScopeSubscriber<T, K, C>(store: ICreateSubscriberStore<T, 
                         type: "scope",
                         initial: true
                     },
-                    subscribers: createSubscriber(store)
+                    subscribers: createSubscriber(cloneDeep(store))
                 }
                 newScopedSubscribers.subscribers.contextId = Math.random().toString(16).slice(2)
                 return <Context.Provider value={newScopedSubscribers}>{props.children}</Context.Provider>
