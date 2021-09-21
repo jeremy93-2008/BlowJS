@@ -19,7 +19,7 @@ const { Scope } = createScopeSubscriber<ITestStore, ITestActions, any>(testStore
 ReactDOM.render(<Parent />, document.getElementById("app"))
 
 export function Parent() {
-    const { data } = useDataSubscription(subscribers, "Hola")
+    const { data } = useDataSubscription(subscribers, ["Hola"])
     const { subscribe } = useSubscription(subscribers)
     const { emit } = useEmitter(subscribers)
     const { broadcast } = useBroadcast(subscribers)
